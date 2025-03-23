@@ -1,0 +1,584 @@
+<html>
+   <head>
+	<title>test de tp</title>
+ <style>
+
+body{
+	background-color: #333;
+
+}
+ /*
+  *le style de div qui contient la carte comme un background
+ **/
+ #cadre{
+     border:4px solid black;
+     background-image: url(image/time_zones_4.jpg);/*la cart c'est le background de <div id="cadre">*/
+	 height: 500px;
+	 width:1100px;
+	 background-size: 1100px 500px; 
+	 background-repeat: no-repeat;
+	 background-position: 0px 0px; /* la position initiale de la cart*/  
+}
+/*
+ * le style de légend
+**/
+#legend{
+	border:3px solid black;
+	height: 500px;
+	width: 200px;
+	background-color: #999;
+}
+/*
+ * le style des outile "le menu"
+**/	
+#outile{
+	height:28px;
+	width: 50px;
+
+
+}
+.out:hover{
+	background-color: #ddd;
+}
+/*
+ *tag html pour afficher les cordonnées apreé chaque click
+**/
+#cor{
+	background-color: #000;
+	color: green;
+	width:100px;
+}
+
+/*
+ * une petite image prendre la position de chaque clique sure l'image
+ * la premier position c'est le centre de l"image
+**/
+#symbol{
+
+	position: absolute; 
+	left:515px;/*-22*/
+	top:250px;/*48*/
+
+}
+</style>
+</head>
+<body>
+<script >
+
+ /*
+  *partier déclaration 
+  *@var X ,Y deux variable globale utiliser pour changer la postion par les flesh de la carte initialiser par(0,0)
+  *@var a,b  deux variable globale utiliser pour changer la postion par l'outile main 
+  *@var ZOOM variable globale utiliser pour fair le ZOOM a chaqe fois on le incrementé 
+  *@var operation variable globale utiliser pour connetre l'opération actuelle (zoom avent ou aréair.... )
+  *@var evenements variable global pour géré la main
+  *@var ZO variiable global pour afficher les nveau de zoom
+ **/ 
+   var X = 0;
+   var Y = 0;
+   var a = 0;
+   var b = 0;
+   var ZO =1;
+   var ZOOM =1100;
+   var operation ="";
+   var evenements ="";
+   
+     /*
+	  *@function
+	  *@nom: cursor_mov
+	  *@parametre: pas de parametre
+	  *cette fonction est décloncher apré le clickage sure le photo de main 
+	  *elle change le style cursor de flech a main
+	  *suvgardé l'opération actuelle 
+     **/
+     	function cursor_mov(){
+
+		   operation = "mov";
+
+		   document.getElementById('cadre').style.cursor='url(\'image/cursor_hand.png\'), pointer';
+		
+		}
+     /*
+	  *@function
+	  *@nom: cursor_zoom_p
+	  *@parametre: pas de parametre
+	  *cette fonction est décloncher apré ckickage sur outile zoom avent  
+	  *elle changer le style de cursor par un icon de zoom+
+	  * *suvgardé l'opération actuelle 
+     **/
+		function cursor_zoom_p(){
+		   	operation = "zoom_p";	   
+            document.getElementById('cadre').style.cursor='url(\'image/zoom_in.ico\'), pointer';
+		
+		}
+     /*
+	  *@function
+	  *@nom: cursor_zoom_n
+	  *@parametre: pas de parametre
+	  *cette fonction est décloncher apré ckickage sur outile zoom avent  
+	  *elle changer le style de cursor par un icon de zoom-
+	  *suvgardé l'opération actuelle 
+     **/
+		function cursor_zoom_n(){
+		   operation = "zoom_n";
+		   document.getElementById('cadre').style.cursor='url(\'image/zoom_out.ico\'), pointer';
+				
+		}
+     /*
+	  *@function
+	  *@nom: zoom
+	  *@parametre: pas de parametre
+	  *cette fonction est décloncher apré ckickage sur la carte elle faire  
+	  *le  zoom selon l'opération choisé
+     **/
+	function zoom(){
+
+		if (operation ==  "zoom_p") {/*test pour conneter l'opération choiser selon le changement du cursor*/
+			if (ZO<10){
+
+              a = event.clientX-550;
+              b = event.clientY-260;
+              X = X-a;
+              Y = Y-b;
+             ZOOM +=80;
+             ZO++;
+             document.getElementById("cadre").style.backgroundSize=ZOOM +"px"; /*incrémentation de zoom*/
+
+             document.getElementById('cor2').innerText="zoom X" + ZO;
+           // j= document.getElementById("cadre").style.backgroundSize;
+            
+            //alert(j);
+            
+             //  i = document.getElementById("cadre").style.backgroundPosition;
+             //  alert(i); 
+               if (X>0) { X=0; }
+
+               if(Y>0){ Y=0; }
+               //alert(X);
+                
+          if(X<0 || Y<0){
+
+			switch(ZO ) {
+			    case 2:
+			        if(X<-85)X=-85;
+			        if(Y<-120)Y=-120;
+			        break;
+			    case 3:
+			        if(X<-165)X=-165;
+			        if(Y<-160)Y=-160;
+			        break;
+			    case 4:
+			        if(X<-245)X=-245;
+			        if(Y<-200)Y=-200;
+			        break;
+			    case 5:
+			        if(X<-325)X=-325;
+			        if(Y<-240)Y=-240;
+			        break;
+			    case 6:
+			        if(X<-405)X=-405;			      
+			        if(Y<-280)Y=-280;			      
+			        break;
+			    case 7:
+			        if(X<-485)X=-485;
+			        if(Y<-320)Y=-320;
+			        break;
+			    case 8:
+			        if(X<-565)X=-565;
+			         if(Y<-360)Y=-360;
+			        break;
+			    case 9:
+			        if(X<-645)X=-645;
+			        if(Y<-400)Y=-400;
+			        break;
+			    case 10:
+			        if(X<-725)X=-725;
+			        if(Y<-440)Y=-440;
+			        break;			        			        			        			        			       
+			    default:
+			        
+			}
+		}
+			     		
+				document.getElementById("cadre").style.backgroundPositionX = X + "px"; 	
+				document.getElementById("cadre").style.backgroundPositionY = Y +"px"; 
+                   
+             
+           }else{
+              
+               alert("limit de max de zoom");
+
+           }
+
+		}
+		if (operation ==  "zoom_n") {/*test pour conneter l'opération choiser selon le changement du cursor*/
+			if (ZOOM>1150) {
+              ZOOM -=80;
+              ZO--;
+              document.getElementById("cadre").style.backgroundSize=ZOOM +"px"; /*décrementation de zoom*/
+              document.getElementById('cor2').innerText="zoom : X" + ZO; /* afficher le niveau de zoom dans l'element du id=cor2*/	
+
+              a = event.clientX-600;
+              b = event.clientY-350;
+              X = X-a;
+              Y = Y-b;
+              
+              if (X>0 ) {
+               	  X=0;
+               }
+               if(Y>0){Y=0; }
+          if(X<0 || Y<0){
+
+			switch(ZO) {
+			    case 1:
+			        if(X<-85)X=-0;
+                    if(Y<-40)Y=0;
+			    case 2:
+			        if(X<-85)X=-85;
+			        if(Y<-120)Y=-120;
+			        break;
+			    case 3:
+			        if(X<-165)X=-165;
+			        if(Y<-160)Y=-160;
+			        break;
+			    case 4:
+			        if(X<-245)X=-245;
+			        if(Y<-200)Y=-200;
+			        break;
+			    case 5:
+			        if(X<-325)X=-325;
+			        if(Y<-240)Y=-240;
+			        break;
+			    case 6:
+			        if(X<-405)X=-405;			      
+			        if(Y<-280)Y=-280;			      
+			        break;
+			    case 7:
+			        if(X<-485)X=-485;
+			        if(Y<-320)Y=-320;
+			        break;
+			    case 8:
+			        if(X<-565)X=-565;
+			         if(Y<-360)Y=-360;
+			        break;
+			    case 9:
+			        if(X<-645)X=-645;
+			        if(Y<-400)Y=-400;
+			        break;
+			    case 10:
+			        if(X<-725)X=-725;
+			        if(Y<-440)Y=-440;
+			        break;			        			        			        			        			       
+			    default:
+			       
+			}
+		}
+				document.getElementById("cadre").style.backgroundPositionX = X + "px"; 	
+				document.getElementById("cadre").style.backgroundPositionY = Y +"px";
+
+
+
+			}else{
+
+				alert("limit de min de zoom");
+			}
+
+
+		}
+	}
+     /*
+	  *@function
+	  *@nom: gliss_left
+	  *@parametre: pas de parametre
+	  *cette fonction est décloncher apré ckickage sur l'outile felche ver gauche
+     **/
+	function gliss_left(){
+             X+=50;
+           verifer_marg();
+		     document.getElementById("cadre").style.backgroundPosition = X + "px " + Y +"px";			
+	}
+     /*
+	  *@function
+	  *@nom: gliss_right
+	  *@parametre: pas de parametre
+	  *cette fonction est décloncher apré ckickage sur l'outile felche ver droit
+     **/
+	function gliss_right(){
+             X-=50;
+             verifer_marg();
+		     document.getElementById("cadre").style.backgroundPosition = X + "px " + Y +"px";		
+	}
+     /*
+	  *@function
+	  *@nom: gliss_top
+	  *@parametre: pas de parametre
+	  *cette fonction est décloncher apré ckickage sur l'outile felche ver hau
+     **/
+	function gliss_top(){
+             Y-=50;
+             verifer_marg();
+		     document.getElementById("cadre").style.backgroundPosition = X + "px " + Y +"px";					
+	}
+     /*
+	  *@function
+	  *@nom: gliss_bottom
+	  *@parametre: pas de parametre
+	  *cette fonction est décloncher apré ckickage sur l'outile felche ver bas
+     **/
+	function gliss_bottom(){
+             
+              Y+=50;
+              verifer_marg();
+		     document.getElementById("cadre").style.backgroundPosition = X + "px " + Y +"px";
+
+						
+	}
+     /*
+	  *@function
+	  *@nom: get_cordinate
+	  *@parametre: pas de parametre
+	  *cette fonction est décloncher apré ckickage sur l'image elle donneé les cordonnées
+	  * de chaque clickage sur l'image et change la position de petite image dans la cart
+     **/
+	function get_cordinate ()
+        {  
+			document.getElementById('cor').innerText='X :' + event.clientX + ' Y :' + event.clientY ;			
+			document.getElementById('symbol').style.left= event.clientX-22 + 'px';
+			document.getElementById('symbol').style.top=  event.clientY-48 + 'px';
+		
+			//widt = document.documentElement.clientWidth;	
+        }
+
+
+     /*
+	  *@function
+	  *@nom: mov
+	  *@parametre: pas de parametre
+	  *cette fonction est décloncher si on choiser l'outile main  
+	  * elle déclanché apré le clickage sur l'image elle bouger la cart selon le movmentr de la souri
+     **/
+   
+	function mov(){
+	
+		 if (evenements == "down") {
+	            
+	             var n1 = event.clientX-a;
+	             var n2 = event.clientY-b;
+	             X = X+n1;
+	             Y = Y+n2;
+               if (X>0) { X=0; }
+
+               if(Y>0){ Y=0; }
+               //alert(X);
+                
+          if(X<0 || Y<0){
+
+			switch(ZO ) {
+			    case 1:
+			        if(X<0)X=0;
+			        if(Y<0)Y=0;
+			        break;
+			    case 2:
+			        if(X<-85)X=-85;
+			        if(Y<-120)Y=-120;
+			        break;
+			    case 3:
+			        if(X<-165)X=-165;
+			        if(Y<-160)Y=-160;
+			        break;
+			    case 4:
+			        if(X<-245)X=-245;
+			        if(Y<-200)Y=-200;
+			        break;
+			    case 5:
+			        if(X<-325)X=-325;
+			        if(Y<-240)Y=-240;
+			        break;
+			    case 6:
+			        if(X<-405)X=-405;			      
+			        if(Y<-280)Y=-280;			      
+			        break;
+			    case 7:
+			        if(X<-485)X=-485;
+			        if(Y<-320)Y=-320;
+			        break;
+			    case 8:
+			        if(X<-565)X=-565;
+			         if(Y<-360)Y=-360;
+			        break;
+			    case 9:
+			        if(X<-645)X=-645;
+			        if(Y<-400)Y=-400;
+			        break;
+			    case 10:
+			        if(X<-725)X=-725;
+			        if(Y<-440)Y=-440;
+			        break;			        			        			        			        			       
+			    default:
+			        
+			}
+		}	             
+				 document.getElementById("cadre").style.backgroundPositionX = X + "px"; 	
+				 document.getElementById("cadre").style.backgroundPositionY = Y +"px";
+				 
+	             // document.getElementById("cadre").style.backgroundPosition = X + "px "; + Y +"px"; 
+	              //alert(a);
+	    }
+	 }
+     /*
+	  *@function
+	  *@nom: event_down
+	  *@parametre: pas de parametre
+	  *cette fonction est décloncher apré l'evenemet onmousedown   
+	  * elle vérifer si nous choisi ou pas l'outile main 
+	  * si oui elle fai  evenements ="down" pour connetre l'état de la souri "pour utiliser dans mov()"
+     **/
+
+	function event_down(){
+		   if(operation == "mov"){
+		       
+		       evenements ="down";      
+		       a = event.clientX;
+		       b = event.clientY;
+		       document.getElementById('cadre').style.cursor='url(\'image/cursor_drag_hand.ico\'), pointer';
+		       //alert(b);
+		   }
+	}
+     /*
+	  *@function
+	  *@nom: event_down
+	  *@parametre: pas de parametre
+	  *cette fonction est décloncher apré l'evenemet onmouseup  
+	  * elle vérifer si nous choisi ou pas l'outile main 
+	  * si oui elle fai  evenements ="up" pour connetre l'état de la souri "pour utiliser dans mov()"
+     **/
+	function event_up(){
+	   if(operation == "mov"){
+		 
+		 evenements ="up";
+		 document.getElementById('cadre').style.cursor='url(\'image/cursor_hand.png\'), pointer';
+		// alert(b);
+	    }
+
+	    var h;
+	     h = document.getElementById("cadre").style.backgroundSize;
+        // alert(h);
+	}
+    function recad(){
+        document.getElementById("cadre").style.backgroundSize="1100px 500px";
+        document.getElementById("cadre").style.backgroundPosition ="0px 0px";
+    }
+    function verifer_marg(){
+    	              if (X>0 ) {
+               	  X=0;
+               }
+               if(Y>0){Y=0; }
+          if(X<0 || Y<0){
+
+			switch(ZO) {
+			    case 1:
+			        if(X<0)X=-0;
+                    if(Y<0)Y=0;
+			    case 2:
+			        if(X<-85)X=-85;
+			        if(Y<-120)Y=-120;
+			        break;
+			    case 3:
+			        if(X<-165)X=-165;
+			        if(Y<-160)Y=-160;
+			        break;
+			    case 4:
+			        if(X<-245)X=-245;
+			        if(Y<-200)Y=-200;
+			        break;
+			    case 5:
+			        if(X<-325)X=-325;
+			        if(Y<-240)Y=-240;
+			        break;
+			    case 6:
+			        if(X<-405)X=-405;			      
+			        if(Y<-280)Y=-280;			      
+			        break;
+			    case 7:
+			        if(X<-485)X=-485;
+			        if(Y<-320)Y=-320;
+			        break;
+			    case 8:
+			        if(X<-565)X=-565;
+			         if(Y<-360)Y=-360;
+			        break;
+			    case 9:
+			        if(X<-645)X=-645;
+			        if(Y<-400)Y=-400;
+			        break;
+			    case 10:
+			        if(X<-725)X=-725;
+			        if(Y<-440)Y=-440;
+			        break;			        			        			        			        			       
+			    default:
+			       
+			}
+		}
+
+    }
+</script>
+<table >
+	<tr>
+	 <td>
+		<!-- div qui contient la carte comme un background-->
+
+    <div id="cadre" onclick="zoom();get_cordinate();" onmouseup="event_up();" onmousedown="event_down();" onmousemove="mov();" >		    
+		     <img src="image/map_pin.ico" id="symbol"/>
+	</div>
+
+	  </td>
+		 <td>			
+			<div id="legend">				
+				<table>
+					<tr><td bgcolor="#290" width="40px"></td> <td>huhu</td></tr>
+					<tr><td bgcolor="#f50"></td> <td>huhu</td></tr>
+					<tr><td bgcolor="#490"></td> <td>huhu</td></tr>
+					<tr><td bgcolor="#e90"></td> <td>huhu</td></tr>
+					<tr><td bgcolor="#e90"></td> <td>huhu</td></tr>
+					<tr><td bgcolor="#e90"></td> <td>huhu</td></tr>
+				</table>
+			</div> 
+		</td>
+	</tr>
+</table>
+	
+<!-- tableaux qui contient le menu d'outile-->
+	 <table border="3px" width="450px" bgcolor="#666">
+		<tr>
+			<td></td>
+			<td class="out" ><img src="image/direction_up.ico" id="outile" onclick="gliss_top();"></td>
+			<td></td>
+			<td class="out" rowspan="3"><img src="image/zoom_in (1).ico" id="outile" onclick="cursor_zoom_p();"/></td>
+			<td class="out" rowspan="4"><img src="image/zoom_out (1).ico" id="outile" onclick="cursor_zoom_n();"/></td>
+			<td class="out" rowspan="4"><img src="image/cursor_hand.png" id="outile" onclick="cursor_mov();"/></td>
+			<td class="out" class="out" bgcolor="black" rowspan="3" ><font color="#fff" >cordinate (x,y)</font>
+				<p id="cor" >X : 0 Y : 0</p>
+				
+			</td>
+			<td class="out" bgcolor="black" rowspan="3" ><font color="#fff" ><p c id="cor2" >zoom X</p></font></td>
+            <td class="out" bgcolor="black" rowspan="3" onclick="recad();" ><p c id="cor2" ><a href="#">Recadrement</a></p></td>
+		</tr>
+		<tr>
+			<td class="out"><img src="image/direction_left(1).ico" id="outile" onclick="gliss_left();"></td>
+			<td class="out"></td>
+			<td class="out"><img src="image/direction_right.ico" id="outile" onclick="gliss_right();"></td>
+            
+		</tr>
+		<tr>
+			<td></td>
+			<td class="out" ><img src="image/direction_down.ico" id="outile" onclick="gliss_bottom(X,Y);"></td>
+			
+			<td></td>
+			
+		</tr>
+	 </table>
+	
+
+</body> 
+
+</html>
